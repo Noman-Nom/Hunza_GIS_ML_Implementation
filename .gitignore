@@ -361,7 +361,3 @@ wandb/
 # Custom Rules for This Project
 # =============================================================================
 # Keep this project's source code but ignore all data and outputs
-!src/
-!scripts/
-!notebooks/*.md
-!notebooks/*.txt
