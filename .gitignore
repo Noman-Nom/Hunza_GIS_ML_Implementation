@@ -1,0 +1,367 @@
+# Hunza_GIS_Data_Extraction/.gitignore
+# =============================================================================
+# Geospatial/GIS Data Files (Large files - do not upload to GitHub)
+# =============================================================================
+
+# Raster/GeoTIFF files
+*.tif
+*.tiff
+*.TIF
+*.TIFF
+*.geotiff
+*.img
+*.hdf
+*.h5
+*.hdf5
+*.nc
+*.nc4
+*.netcdf
+*.grd
+*.asc
+*.bil
+*.bsq
+*.bip
+*.dem
+*.dt0
+*.dt1
+*.dt2
+
+# Vector files
+*.shp
+*.shx
+*.dbf
+*.prj
+*.sbn
+*.sbx
+*.fbn
+*.fbx
+*.ain
+*.aih
+*.ixs
+*.mxs
+*.atx
+*.shp.xml
+*.cpg
+*.qix
+*.kml
+*.kmz
+*.gpx
+*.gml
+*.geojson
+*.geojsonl
+*.gpkg
+*.sqlite
+*.sqlite3
+*.mbtiles
+
+# Compression/Archive files
+*.zip
+*.tar
+*.gz
+*.tar.gz
+*.7z
+*.rar
+
+# QGIS files
+*.qgs
+*.qgz
+*.qpj
+*.qlr
+*.qml
+*.sld
+*.qpt
+
+# ArcGIS files
+*.mxd
+*.lyr
+*.gdb/
+*.mdb
+*.sde
+*.sd
+*.aprx
+
+# CAD files
+*.dwg
+*.dxf
+*.dgn
+
+# Other GIS formats
+*.e00
+*.tab
+*.map
+*.id
+*.dat
+*.ovr
+*.aux.xml
+
+# =============================================================================
+# Jupyter Notebook (specifically your problematic files)
+# =============================================================================
+
+# Remove the specific large notebook causing issues
+geospatial_project/notebooks/03_visualization.ipynb
+geospatial_project_2021/outputs/qgis.zip
+
+# General Jupyter ignore rules
+# .ipynb_checkpoints/
+# *.ipynb_checkpoints
+# .jupyter/
+# *.ipynb
+
+# Converted notebooks
+*-converted.ipynb
+.ipynb_convert.log
+
+# =============================================================================
+# Python
+# =============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Python virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.conda/
+*.conda
+poetry.lock
+Pipfile.lock
+pyvenv.cfg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.code-workspace
+
+# =============================================================================
+# Operating System Files
+# =============================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Windows
+[Tt]humbs.db
+*.lnk
+
+# Linux
+*~
+
+# =============================================================================
+# Project Specific Directories and Files
+# =============================================================================
+
+# Large output directories
+# outputs/
+# outputs/**/*
+!outputs/.gitkeep
+
+# Data directories
+data/raw/
+data/processed/
+data/interim/
+data/external/
+data/**/*.tif
+# data/**/*.geojson
+data/**/*.shp
+data/**/*.zip
+!data/.gitkeep
+!data/README.md
+
+# Specifically ignore your problematic outputs
+# geospatial_project_2021/outputs/
+# geospatial_project/outputs/
+
+# Cache directories
+.cache/
+.pytest_cache/
+.mypy_cache/
+__pycache__/
+
+# =============================================================================
+# Testing and Coverage
+# =============================================================================
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+.tox/
+.nox/
+.pytest_cache/
+test_output/
+
+# =============================================================================
+# Logs and Databases
+# =============================================================================
+*.log
+logs/
+*.sqlite
+*.db
+*.sqlite3
+
+# =============================================================================
+# Documentation
+# =============================================================================
+docs/_build/
+docs/build/
+site/
+
+# =============================================================================
+# Package Managers
+# =============================================================================
+node_modules/
+bower_components/
+package-lock.json
+yarn.lock
+
+# =============================================================================
+# Cloud/Service Specific
+# =============================================================================
+.dvc/
+.dvcignore
+.dvc.lock
+
+# =============================================================================
+# Secrets and Environment Variables
+# =============================================================================
+*.env
+*.secret
+*.key
+*.pem
+credentials.json
+secrets.yml
+config.yml
+config.yaml
+
+# =============================================================================
+# Editor specific
+# =============================================================================
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# PyCharm/IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Vim
+*.swp
+*.swo
+*.un~
+Session.vim
+
+# =============================================================================
+# Temporary and Backup Files
+# =============================================================================
+*~
+*.bak
+*.tmp
+*.temp
+*.backup
+*.sav
+
+# =============================================================================
+# R/RStudio (if applicable)
+# =============================================================================
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+# =============================================================================
+# LaTeX (if applicable)
+# =============================================================================
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*.pdf
+
+# =============================================================================
+# Exceptions (files/directories to keep)
+# =============================================================================
+!README.md
+!LICENSE
+!.gitkeep
+!requirements.txt
+!setup.py
+!pyproject.toml
+!environment.yml
+!*.py
+
+# =============================================================================
+# Machine Learning/Deep Learning
+# =============================================================================
+*.pth
+*.pt
+*.h5
+*.hdf5
+*.ckpt
+*.model
+*.weights
+*.onnx
+*.pb
+checkpoints/
+models/
+wandb/
+
+# =============================================================================
+# Custom Rules for This Project
+# =============================================================================
+# Keep this project's source code but ignore all data and outputs
+!src/
+!scripts/
+!notebooks/*.md
+!notebooks/*.txt
