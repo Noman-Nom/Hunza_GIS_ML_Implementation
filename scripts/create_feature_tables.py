@@ -30,6 +30,16 @@ INDEX_NAMES = ['NDVI', 'NDSI', 'NDWI']
 SCALE_FACTOR = 0.0000275
 OFFSET = -0.2
 
+# Class names for reporting
+CLASS_NAMES = {
+    0: 'Snow/Ice',
+    1: 'Water',
+    2: 'Bare Rock',
+    3: 'Sparse Vegetation',
+    4: 'Moderate Vegetation',
+    5: 'Dense Vegetation'
+}
+
 def scale_band(dn_values):
     """Convert DN to surface reflectance"""
     reflectance = (dn_values * SCALE_FACTOR) + OFFSET
@@ -123,31 +133,51 @@ def extract_features_year(year, max_samples=None):
     
     # Sample if requested
     if max_samples and len(df) > max_samples:
-        print(f"   Sampling {max_samples:,} pixels...")
-        df = df.sample(n=max_samples, random_state=42)
+        print(f"   Sampling {max_samples:,} pixels (stratified by class)...")
+        
+        # Stratified sampling to maintain class proportions
+        df_sampled = pd.DataFrame()
+        for cls in df['Class'].unique():
+            df_cls = df[df['Class'] == cls]
+            n_cls = len(df_cls)
+            n_sample_cls = int(max_samples * n_cls / len(df))
+            
+            if n_sample_cls > 0:
+                if n_sample_cls < n_cls:
+                    df_cls_sampled = df_cls.sample(n=n_sample_cls, random_state=42)
+                else:
+                    df_cls_sampled = df_cls
+                df_sampled = pd.concat([df_sampled, df_cls_sampled], ignore_index=True)
+        
+        df = df_sampled
         print(f"   Final size: {len(df):,} pixels")
     
     # Class distribution
     print("\n📊 Class Distribution:")
     class_counts = df['Class'].value_counts().sort_index()
-    class_names = {
-        0: 'Snow/Ice',
-        1: 'Water',
-        2: 'Bare Rock',
-        3: 'Sparse Vegetation',
-        4: 'Moderate Vegetation',
-        5: 'Dense Vegetation'
-    }
     for cls, count in class_counts.items():
         pct = count / len(df) * 100
-        print(f"   Class {int(cls)} ({class_names[int(cls)]:20s}): {count:>10,} ({pct:>5.2f}%)")
+        class_name = CLASS_NAMES.get(int(cls), f'Unknown ({int(cls)})')
+        print(f"   Class {int(cls)} ({class_name:20s}): {count:>10,} ({pct:>5.2f}%)")
+    
+    # Feature statistics summary
+    print("\n📈 Feature Statistics:")
+    feature_cols = BAND_NAMES + INDEX_NAMES
+    for feat in feature_cols:
+        values = df[feat]
+        print(f"   {feat:10s}: min={values.min():>7.4f}, max={values.max():>7.4f}, "
+              f"mean={values.mean():>7.4f}, std={values.std():>7.4f}")
     
     return df
 
 def main():
     """Main extraction pipeline"""
+    print("="*80)
     print("🚀 Starting Feature Extraction Pipeline")
+    print("="*80)
     print(f"📁 Output directory: {PROCESSED_DIR}")
+    print(f"🔧 Landsat scaling: reflectance = (DN × {SCALE_FACTOR}) + {OFFSET}")
+    print(f"📊 Features: {len(BAND_NAMES)} bands + {len(INDEX_NAMES)} indices = {len(BAND_NAMES) + len(INDEX_NAMES)} total")
     
     all_years_data = []
     
@@ -167,11 +197,13 @@ def main():
             
         except Exception as e:
             print(f"❌ ERROR processing year {year}: {str(e)}")
+            import traceback
+            traceback.print_exc()
             continue
     
     # Combine all years
     if all_years_data:
-        print(f"\n{'='*60}")
+        print(f"\n{'='*80}")
         print("🔗 Combining all years...")
         df_combined = pd.concat(all_years_data, ignore_index=True)
         
@@ -182,15 +214,34 @@ def main():
         print(f"\n✅ Pipeline Complete!")
         print(f"   Total pixels: {len(df_combined):,}")
         print(f"   File size: {combined_path.stat().st_size / 1024**2:.2f} MB")
+        
         print(f"\n📊 Overall Class Distribution:")
         class_counts = df_combined['Class'].value_counts().sort_index()
         for cls, count in class_counts.items():
             pct = count / len(df_combined) * 100
-            print(f"   Class {int(cls)}: {count:>12,} ({pct:>5.2f}%)")
+            class_name = CLASS_NAMES.get(int(cls), f'Unknown ({int(cls)})')
+            print(f"   Class {int(cls)} ({class_name:20s}): {count:>12,} ({pct:>5.2f}%)")
+        
+        print(f"\n📊 Pixels per Year:")
+        year_counts = df_combined['Year'].value_counts().sort_index()
+        for year, count in year_counts.items():
+            pct = count / len(df_combined) * 100
+            print(f"   Year {year}: {count:>12,} ({pct:>5.2f}%)")
     
-    print(f"\n{'='*60}")
-    print("🎉 All Done! Next: Run sampling and train/test split")
-    print(f"{'='*60}")
+    print(f"\n{'='*80}")
+    print("🎉 All Done! Feature tables created successfully!")
+    print(f"{'='*80}")
+    print("\n📁 Output files:")
+    for file in sorted(PROCESSED_DIR.glob("*.csv")):
+        size_mb = file.stat().st_size / 1024**2
+        print(f"   {file.name} ({size_mb:.2f} MB)")
+    
+    print(f"\n🎯 Next Steps:")
+    print("   1. Train/validation/test split")
+    print("   2. Train Random Forest classifier")
+    print("   3. Evaluate model performance")
+    print("   4. Compare with threshold-based classification")
+    print(f"{'='*80}")
 
 if __name__ == "__main__":
     main()
