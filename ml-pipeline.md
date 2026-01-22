@@ -621,7 +621,7 @@ The classification results are consistent with the physiographic characteristics
 
 The feature extraction pipeline transforms multi-band raster data into a tabular format suitable for machine learning algorithms. This process involves loading raster data, extracting pixel values, combining features, and sampling for computational efficiency.
 
-### Pipeline Architecture--
+### Pipeline Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
