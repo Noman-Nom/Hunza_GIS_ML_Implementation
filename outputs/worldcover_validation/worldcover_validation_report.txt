@@ -1,0 +1,41 @@
+============================================================
+ESA WorldCover 2021 vs RF Prediction 2023 — Validation Report
+============================================================
+Date: 2026-05-02
+RF prediction: e:\zaheer-work\Hunza_GIS_ML_Implementation\outputs\rf_prediction_2023.tif
+ESA WorldCover tiles: N36E072, N36E075 (v200, 2021)
+
+CLASS MAPPING (ESA → RF):
+  ESA 70 Snow and ice     → RF 0 Snow/Ice
+  ESA 60 Bare/sparse veg  → RF 1 Bare Rock
+  ESA 20 Shrubland        → RF 2 Sparse Veg
+  ESA 30 Grassland        → RF 2 Sparse Veg
+  ESA 40 Cropland         → RF 3 Moderate Veg
+  ESA 10 Tree cover       → RF 4 Dense Veg
+  ESA 80 Water            → EXCLUDED
+  ESA 50 Built-up         → EXCLUDED
+
+AGREEMENT STATISTICS:
+  Overall Agreement: 69.31%
+  Cohen's Kappa:     0.5127
+  Valid pixels:      14,678,142
+
+CONFUSION MATRIX (rows=WorldCover, cols=RF):
+                 RF:Snow/Ice  RF:Bare Rock  ...  RF:Moderate Veg  RF:Dense Veg
+WC:Snow/Ice          3570220       2757790  ...              682            33
+WC:Bare Rock          175110       5341546  ...             9574            26
+WC:Sparse Veg           3833        718388  ...           235846          6141
+WC:Moderate Veg            0           235  ...            12536          1986
+WC:Dense Veg               1          7523  ...           115551          8800
+
+[5 rows x 5 columns]
+
+INTERPRETATION:
+  - Snow/Ice and Bare Rock typically show highest agreement
+    (spectrally distinct, ESA mapping is reliable)
+  - Vegetation sub-classes may show cross-class confusion
+    (ESA uses different thresholds than K-Means NDVI ranges)
+  - Discrepancies reflect: (1) different sensor resolution
+    (ESA=10m Sentinel-2 vs Landsat=30m), (2) different years
+    (ESA=2021 vs RF=2023), (3) class definition differences
+============================================================
